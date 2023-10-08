@@ -1,0 +1,11 @@
+services:
+  backend:
+    build: .
+    command: npm run start:dev
+    # Production only
+    # command: npm run build
+    ports:
+      - "3001:3001"
+    volumes:
+      - .:/usr/app/backend
+      - /usr/app/backend/node_modules
