@@ -1,9 +1,15 @@
-export interface Task {
-  id: string;
-  title: string;
+import mongoose from "mongoose";
 
-  usersAllowed: string;
-  createdBy: string;
+const BoardSchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  usersAllowed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
 
-  tasks: string[];
-}
+const BoardModel = mongoose.model("Board", BoardSchema);
+
+export { BoardModel };

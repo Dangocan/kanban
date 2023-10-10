@@ -1,12 +1,13 @@
-export interface Task {
-  id: string;
-  title: string;
-  status: 0 | 1 | 2;
-  description?: string;
-  // attachment?: any[];
+import mongoose from "mongoose";
 
-  boardId: string;
+const TaskSchema = new mongoose.Schema({
+  title: String,
+  status: { type: Number, default: 0, enum: [0, 1, 2] },
+  boardId: { type: mongoose.Schema.Types.ObjectId, ref: "Board" },
+  userInCharge: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  description: String,
+});
 
-  userInCharge?: string;
-  createdBy: string;
-}
+const TaskModel = mongoose.model("Task", TaskSchema);
+
+export { TaskModel };
