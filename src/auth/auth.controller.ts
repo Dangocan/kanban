@@ -1,17 +1,13 @@
 import { Router } from "express";
 import { UserModel } from "../user/user.entity";
 import { UserService } from "../user/user.service";
+import { checkJwtToken } from "../middlewares/jwtValidation";
 
 const routePrefix = "/auth";
 const AuthRouter = Router();
 
-AuthRouter.get(`${routePrefix}/debbug`, async (req, res) => {
-  const users = await UserModel.create({
-    name: "danilo",
-    email: "danilo@teste.com",
-    boards: [],
-    password: "123456",
-  });
+AuthRouter.get(`${routePrefix}/debbug`, checkJwtToken, async (req, res) => {
+  const users = await UserModel.count();
   res.status(201).json(users);
 });
 
@@ -28,8 +24,8 @@ AuthRouter.post(`${routePrefix}/register`, async (req, res) => {
 AuthRouter.post(`${routePrefix}/login`, async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await UserService.login(email, password);
-    res.status(200).json(user);
+    const { userIfExists, jwtToken } = await UserService.login(email, password);
+    res.status(200).json({ userIfExists, jwtToken });
   } catch (error) {
     res.status(401).json({ message: "Invalid credentials" });
   }

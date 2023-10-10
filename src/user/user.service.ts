@@ -1,5 +1,6 @@
 import { UserModel } from "./user.entity";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const UserService = {
   async register(name: string, email: string, password: string) {
@@ -7,9 +8,9 @@ const UserService = {
       throw new Error("Missing required fields");
     }
 
-    const userExists = await UserModel.findOne({ email });
+    const userIfExists = await UserModel.findOne({ email });
 
-    if (userExists) {
+    if (userIfExists) {
       throw new Error("User already exists");
     }
 
@@ -20,7 +21,6 @@ const UserService = {
       name,
       email,
       password: hashedPassword,
-      boards: [],
     });
     return user;
   },
@@ -30,19 +30,26 @@ const UserService = {
       throw new Error("Missing required fields");
     }
 
-    const userExists = await UserModel.findOne({ email });
+    const userIfExists = await UserModel.findOne({ email });
 
-    if (!userExists) {
+    if (!userIfExists) {
       throw new Error("User does not exists");
     }
 
-    const isPasswordCorrect = bcrypt.compare(password, userExists.password);
+    const isPasswordCorrect = bcrypt.compare(password, userIfExists.password);
 
     if (!isPasswordCorrect) {
       throw new Error("Invalid credentials");
     }
 
-    return userExists;
+    const jwtToken = jwt.sign(
+      {
+        id: userIfExists.id,
+      },
+      process.env.JWT_SECRET as string
+    );
+
+    return { userIfExists, jwtToken };
   },
 };
 
