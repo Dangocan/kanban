@@ -1,6 +1,7 @@
 import { UserModel } from "./user.entity";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { BoardModel } from "../board/board.entity";
 
 const UserService = {
   async register(name: string, email: string, password: string) {
@@ -30,7 +31,7 @@ const UserService = {
       throw new Error("Missing required fields");
     }
 
-    const userIfExists = await UserModel.findOne({ email });
+    const userIfExists = await UserModel.findOne({ email }, "-password");
 
     if (!userIfExists) {
       throw new Error("User does not exists");
@@ -50,6 +51,21 @@ const UserService = {
     );
 
     return { userIfExists, jwtToken };
+  },
+
+  async getAllByBoardId(boardId: string) {
+    const boardIfExist = await BoardModel.findById(boardId).populate({
+      path: "usersAllowed",
+      select: "name",
+    });
+
+    if (!boardIfExist) {
+      throw new Error("Board not found");
+    }
+
+    const users = boardIfExist.usersAllowed;
+
+    return users;
   },
 };
 
