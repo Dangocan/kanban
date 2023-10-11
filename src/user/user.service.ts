@@ -1,6 +1,6 @@
-import { UserModel } from "./user.entity";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { UserModel } from "./user.entity";
 import { BoardModel } from "../board/board.entity";
 
 const UserService = {

@@ -3,9 +3,9 @@ services:
     build: .
     env_file:
       - .env
-    command: npm run start:dev
-    # Production only
-    # command: npm run build
+    command: npm run build
+    # Dev only
+    # command: npm run start:dev
     volumes:
       - .:/usr/app/backend
       - /usr/app/backend/node_modules

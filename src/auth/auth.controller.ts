@@ -1,15 +1,8 @@
 import { Router } from "express";
-import { UserModel } from "../user/user.entity";
 import { UserService } from "../user/user.service";
-import { checkJwtToken } from "../middlewares/jwtValidation";
 
 const routePrefix = "/auth";
 const AuthRouter = Router();
-
-AuthRouter.get(`${routePrefix}/debbug`, checkJwtToken, async (req, res) => {
-  const users = await UserModel.count();
-  res.status(201).json(users);
-});
 
 AuthRouter.post(`${routePrefix}/register`, async (req, res) => {
   const { name, email, password } = req.body;

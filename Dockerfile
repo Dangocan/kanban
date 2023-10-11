@@ -8,7 +8,7 @@ RUN npm install
 
 COPY . .
 
-CMD ["npm", "run", "start:dev"]
+CMD ["npm", "run", "build"]
 
-# Production only
-# CMD ["npm", "run", "build"]
+# Dev only
+# CMD ["npm", "run", "start:dev"]
