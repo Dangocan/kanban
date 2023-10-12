@@ -17,8 +17,8 @@ AuthRouter.post(`${routePrefix}/register`, async (req, res) => {
 AuthRouter.post(`${routePrefix}/login`, async (req, res) => {
   const { email, password } = req.body;
   try {
-    const { userIfExists, jwtToken } = await UserService.login(email, password);
-    res.status(200).json({ userIfExists, jwtToken });
+    const { user, jwtToken } = await UserService.login(email, password);
+    res.status(200).json({ user, jwtToken });
   } catch (error) {
     res.status(401).json({ message: "Invalid credentials" });
   }
