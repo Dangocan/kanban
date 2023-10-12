@@ -8,9 +8,9 @@ const TaskRouter = Router();
 TaskRouter.use(checkJwtToken);
 
 TaskRouter.get(`${routePrefix}`, async (req, res) => {
-  const { boardId } = req.body;
+  const { boardId } = req.query;
   try {
-    const tasks = await TaskService.getAllByBoardId(boardId);
+    const tasks = await TaskService.getAllByBoardId(boardId as string);
     res.status(200).json(tasks);
   } catch (error) {
     res.status(500).json({ message: "Task search failed" });

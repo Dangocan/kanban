@@ -8,9 +8,11 @@ const UserRouter = Router();
 UserRouter.use(checkJwtToken);
 
 UserRouter.get(`${routePrefix}`, async (req, res) => {
-  const { boardId } = req.body;
+  const { boardId } = req.query;
   try {
-    const allBoardsParticipating = await UserService.getAllByBoardId(boardId);
+    const allBoardsParticipating = await UserService.getAllByBoardId(
+      boardId as string
+    );
     res.status(200).json(allBoardsParticipating);
   } catch (error) {
     res.status(500).json({ message: "Board search failed" });
