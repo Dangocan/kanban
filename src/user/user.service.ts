@@ -23,7 +23,15 @@ const UserService = {
       email,
       password: hashedPassword,
     });
-    return user;
+
+    const jwtToken = jwt.sign(
+      {
+        id: user.id,
+      },
+      process.env.JWT_SECRET as string
+    );
+
+    return { user, jwtToken };
   },
 
   async login(email: string, password: string) {
@@ -50,7 +58,7 @@ const UserService = {
       process.env.JWT_SECRET as string
     );
 
-    return { userIfExists, jwtToken };
+    return { user: userIfExists, jwtToken };
   },
 
   async getAllByBoardId(boardId: string) {
