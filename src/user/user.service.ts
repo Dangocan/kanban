@@ -26,7 +26,7 @@ const UserService = {
 
     const jwtToken = jwt.sign(
       {
-        id: user.id,
+        id: user._id,
       },
       process.env.JWT_SECRET as string
     );
@@ -39,13 +39,15 @@ const UserService = {
       throw new Error("Missing required fields");
     }
 
-    const userIfExists = await UserModel.findOne({ email }, "-password");
+    const userIfExists = await UserModel.findOne({ email });
 
     if (!userIfExists) {
       throw new Error("User does not exists");
     }
-
-    const isPasswordCorrect = bcrypt.compare(password, userIfExists.password);
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      userIfExists.password
+    );
 
     if (!isPasswordCorrect) {
       throw new Error("Invalid credentials");
@@ -53,7 +55,7 @@ const UserService = {
 
     const jwtToken = jwt.sign(
       {
-        id: userIfExists.id,
+        id: userIfExists._id,
       },
       process.env.JWT_SECRET as string
     );
